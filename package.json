@@ -1,6 +1,6 @@
 {
   "name": "cookiepilot-legit",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "Lokale Chrome-Erweiterung für Cookie Clicker mit bereinigter CookieBot-Strategie",
   "license": "GPL-3.0-only",

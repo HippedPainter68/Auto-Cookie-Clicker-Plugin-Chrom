@@ -30,7 +30,7 @@ Bei einem neuen Spiel wartet der Bot für True Neverclick auf natürliche golden
 
 Das neue Erweiterungs-ZIP herunterladen und seine Dateien in den bisherigen Erweiterungsordner kopieren und ersetzen. Anschließend unter `chrome://extensions` bei **Auto Cookie Clicker Plugin Chrom** auf **Neu laden** (Kreispfeil) klicken und die Cookie-Clicker-Spielseite neu laden. Verwende denselben Ordner, damit die Erweiterungs-ID, Einstellungen und lokalen Backups erhalten bleiben.
 
-Version **1.0.1** behebt `game.AchievementsById.filter is not a function`: Cookie Clicker verwendet Objekte für seine Achievement- und Upgrade-Register. Die bisherigen Testdaten hatten diese als Arrays nachgebildet; die Tests verwenden nun die tatsächliche Datenform und prüfen zusätzlich die Array-Variante.
+Version **1.0.2** behebt auch `(b.tieredAchievs || []).filter is not a function`: Neben den globalen Achievement- und Upgrade-Registern sind auch `tieredAchievs` und `tieredUpgrades` an Gebäuden Objekte. Die Kaufplanung liest jetzt alle ihre Eingabesammlungen als Werte, ohne die Originalregister umzuschreiben. Die Tests verwenden befüllte Tier-Objekte mit echten Querverweisen und prüfen Meilensteine, Milchboni und Gebäude-plus-Upgrade-Pakete. 25 Sammlungstypen wurden anhand von fünf Original-Spielskripten erfasst; eine zusätzliche Syntaxprüfung verhindert direkte Array-Operationen auf den bekannten Objektregistern.
 
 ## Wie er investiert
 
@@ -62,6 +62,8 @@ npm run package
 Für den Browser-Test wird unter Windows standardmäßig installiertes Chrome verwendet; alternativ `COOKIEPILOT_CHROME_PATH` setzen. Unter Linux nutzt Playwright seinen installierten Browser. `test:browser` verwendet einen synthetischen Spielvertrag und ersetzt den Erweiterungs-Transport. Zusätzlich prüft `npm run test:native` mit modernem installiertem Chrome die native Installation, den echten Erweiterungs-Transport und Speicher in einem separaten Testprofil; auch hier ist das Game-Objekt synthetisch. Der manuelle Live-Abruf des echten Spiels wurde durch Cloudflare blockiert; siehe Testbericht.
 
 `vendor/` enthält die unveränderte fixierte GPL-Quelle samt Prüfsumme. `src/strategy-overrides.js` enthält die Änderungen. `scripts/build.mjs` entfernt unzulässige Wege und erzeugt `extension/vendor/strategy.js`. Nur `extension/` wird von Chrome geladen. Build und Tests laufen ohne externe Spielcode-Downloads.
+
+`tests/game-collections.json` dokumentiert die geprüften Sammlungstypen samt Quell-URLs, Zeilen und SHA256-Prüfsummen. Die optionale Prüfung `node scripts/audit-game-collections.mjs <Verzeichnis-mit-Original-Spielskripten>` liest separat heruntergeladene Originaldateien und aktualisiert diesen Nachweis; sie führt keinen Spielcode aus und kopiert ihn nicht in die Erweiterung.
 
 ## Lizenz
 

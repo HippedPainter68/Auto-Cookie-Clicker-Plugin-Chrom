@@ -24,6 +24,9 @@
     'Heavenly bakery', 'Heavenly confectionery', 'Heavenly key']);
   const has = (g, name) => !!g.Upgrades?.[name]?.bought &&
     !(g.ascensionMode === 1 && g.Upgrades[name].pool === 'prestige');
+  // Game registries include both arrays and objects, including string-keyed tiers such as "fortune".
+  // Work on value snapshots without changing the game's registries or entry identities.
+  const values = collection => Object.values(collection || {});
   function milkScale(g) {
     let factor = (has(g, "Santa's milk and cookies") ? 1.05 : 1) * (1 + (g.auraMult?.('Breath of Milk') || 0) * .05);
     factor *= [1, 1.1, 1.05, 1.03][g.hasGod?.('mother') || 0] || 1;
@@ -43,7 +46,7 @@
     return value;
   }
   function context(g, options) {
-    const buildings = g.ObjectsById || [];
+    const buildings = values(g.ObjectsById);
     const sum = buildings.reduce((n, b) => n + (b.storedTotalCps ?? b.storedCps * b.amount), 0);
     const global = sum > 0 ? (g.unbuffedCps ?? g.cookiesPs) / sum : (g.globalCpsMult || 1);
     const currentBuff = (g.unbuffedCps > 0 ? g.cookiesPs / g.unbuffedCps : 1);
@@ -66,7 +69,7 @@
     let raw = b.storedCps * count;
     for (const other of ctx.buildings) {
       const total = other.storedTotalCps ?? other.storedCps * other.amount;
-      for (const syn of other.synergies || []) if (has(g, syn.name)) {
+      for (const syn of values(other.synergies)) if (has(g, syn.name)) {
         if (syn.buildingTie1 === other && syn.buildingTie2 === b) raw += total * .05 * count / (1 + .05 * b.amount);
         if (syn.buildingTie2 === other && syn.buildingTie1 === b) raw += total * .001 * count / (1 + .001 * b.amount);
       }
@@ -77,7 +80,7 @@
     }
     const cursor = g.Objects?.Cursor;
     if (b.id !== 0 && cursor) raw += cursor.amount * fingerValue(g) * count;
-    const newAchievements = (b.tieredAchievs || []).filter(a => !a.won &&
+    const newAchievements = values(b.tieredAchievs).filter(a => !a.won &&
       b.amount + count >= g.Tiers?.[a.tier]?.achievUnlock).length;
     let gain = raw * ctx.global;
     if (newAchievements) gain = (ctx.passive + gain) * milkRatio(g, newAchievements) - ctx.passive;
@@ -139,7 +142,7 @@
       if (b.locked) continue;
       add(b, 'building', b.getPrice(), buildingGain(g, b, ctx));
       // Evaluate reaching the next upgrade threshold together with buying that upgrade.
-      if (options.allowUpgrades !== false) for (const u of b.tieredUpgrades || []) {
+      if (options.allowUpgrades !== false) for (const u of values(b.tieredUpgrades)) {
         const threshold = g.Tiers?.[u.tier]?.unlock, count = threshold - b.amount;
         if (u.bought || count < 1 || count > 10 || !Number.isFinite(count)) continue;
         const before = buildingGain(g, b, ctx, count);
@@ -149,7 +152,7 @@
           confidence: 'Schätzung', reason: `${count} Gebäude + ${u.name} als Paket` }, count);
       }
     }
-    if (options.allowUpgrades !== false) for (const u of Object.values(g.UpgradesById || {})) {
+    if (options.allowUpgrades !== false) for (const u of values(g.UpgradesById)) {
       if (!u.unlocked || u.bought || ['prestige','debug','toggle'].includes(u.pool) || u.priceLumps > 0 || options.avoid?.(u)) continue;
       const gain = upgradeGain(g, u, ctx), price = u.getPrice();
       add(u, 'upgrade', price, gain);

@@ -1,0 +1,182 @@
+{
+  "checked": "2026-10-16",
+  "sources": [
+    {
+      "file": "main.js",
+      "url": "https://orteil.dashnet.org/cookieclicker/main.js",
+      "sha256": "d530a13b6a63034461bb5db25d5c7225bda57d03e49ee24c528e72ff13994fa0"
+    },
+    {
+      "file": "minigameGarden.js",
+      "url": "https://orteil.dashnet.org/cookieclicker/minigameGarden.js",
+      "sha256": "dcdb8cf6a91b7bd4810ecdd81e7877649b341e98897782383798878c01918a7c"
+    },
+    {
+      "file": "minigameMarket.js",
+      "url": "https://orteil.dashnet.org/cookieclicker/minigameMarket.js",
+      "sha256": "9d60751475062efc023e776280a0daad7418b369bd7f412f8f3b1cda8eca7c4e"
+    },
+    {
+      "file": "minigameGrimoire.js",
+      "url": "https://orteil.dashnet.org/cookieclicker/minigameGrimoire.js",
+      "sha256": "469382386f157c0bd3b1c85f3068e20b68f61f432b73756b7dc60da091a34ec6"
+    },
+    {
+      "file": "minigamePantheon.js",
+      "url": "https://orteil.dashnet.org/cookieclicker/minigamePantheon.js",
+      "sha256": "2e7b9cfdaf847cc51f0d42ed06943462111f88cb779bc6f62645e1e632431867"
+    }
+  ],
+  "collections": [
+    {
+      "field": "Game.ObjectsById",
+      "kind": "array",
+      "source": "main.js",
+      "line": 7979
+    },
+    {
+      "field": "Game.AchievementsById",
+      "kind": "object",
+      "source": "main.js",
+      "line": 12886
+    },
+    {
+      "field": "Game.UpgradesById",
+      "kind": "object",
+      "source": "main.js",
+      "line": 9668
+    },
+    {
+      "field": "Game.UpgradesInStore",
+      "kind": "array",
+      "source": "main.js",
+      "line": 9670
+    },
+    {
+      "field": "Game.BankAchievements",
+      "kind": "array",
+      "source": "main.js",
+      "line": 12994
+    },
+    {
+      "field": "Game.CpsAchievements",
+      "kind": "array",
+      "source": "main.js",
+      "line": 13005
+    },
+    {
+      "field": "Game.shimmers",
+      "kind": "array",
+      "source": "main.js",
+      "line": 5414
+    },
+    {
+      "field": "Game.wrinklers",
+      "kind": "array",
+      "source": "main.js",
+      "line": 14590
+    },
+    {
+      "field": "Game.dragonLevels",
+      "kind": "array",
+      "source": "main.js",
+      "line": 15106
+    },
+    {
+      "field": "Game.Tiers",
+      "kind": "object",
+      "source": "main.js",
+      "line": 10110
+    },
+    {
+      "field": "building.tieredAchievs",
+      "kind": "object",
+      "source": "main.js",
+      "line": 8050
+    },
+    {
+      "field": "building.tieredUpgrades",
+      "kind": "object",
+      "source": "main.js",
+      "line": 8049
+    },
+    {
+      "field": "building.synergies",
+      "kind": "array",
+      "source": "main.js",
+      "line": 8051
+    },
+    {
+      "field": "building.productionAchievs",
+      "kind": "array",
+      "source": "main.js",
+      "line": 8010
+    },
+    {
+      "field": "building.pics",
+      "kind": "array",
+      "source": "main.js",
+      "line": 8527
+    },
+    {
+      "field": "garden.plants",
+      "kind": "object",
+      "source": "minigameGarden.js",
+      "line": 22
+    },
+    {
+      "field": "garden.soils",
+      "kind": "object",
+      "source": "minigameGarden.js",
+      "line": 877
+    },
+    {
+      "field": "garden.plantsById",
+      "kind": "array",
+      "source": "minigameGarden.js",
+      "line": 582
+    },
+    {
+      "field": "garden.soilsById",
+      "kind": "array",
+      "source": "minigameGarden.js",
+      "line": 929
+    },
+    {
+      "field": "market.goodsById",
+      "kind": "array",
+      "source": "minigameMarket.js",
+      "line": 122
+    },
+    {
+      "field": "market.offices",
+      "kind": "array",
+      "source": "minigameMarket.js",
+      "line": 291
+    },
+    {
+      "field": "grimoire.spells",
+      "kind": "object",
+      "source": "minigameGrimoire.js",
+      "line": 12
+    },
+    {
+      "field": "grimoire.spellsById",
+      "kind": "array",
+      "source": "minigameGrimoire.js",
+      "line": 259
+    },
+    {
+      "field": "pantheon.gods",
+      "kind": "object",
+      "source": "minigamePantheon.js",
+      "line": 12
+    },
+    {
+      "field": "pantheon.slot",
+      "kind": "array",
+      "source": "minigamePantheon.js",
+      "line": 126
+    }
+  ]
+}

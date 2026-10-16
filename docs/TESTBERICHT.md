@@ -1,6 +1,16 @@
 # Testbericht
 
-Stand: 16.10.2026, Version 1.0.1.
+Stand: 16.10.2026, Version 1.0.2.
+
+## Fehlerbehebung 1.0.2
+
+Ein weiterer Live-Fehlerbericht zeigte `(b.tieredAchievs || []).filter is not a function`. Die vorherige Korrektur hatte die globalen Register berücksichtigt, aber die Gebäude-Tiers in den Testdaten weiterhin falsch als Arrays nachgebildet. Der Original-Konstruktor legt sowohl tieredAchievs als auch tieredUpgrades als Objekte an. Auch diese zwei Zugriffe sind jetzt korrigiert; alle Sammlungen, die in die Kaufplanung eingehen, werden über Werte-Snapshots gelesen. Die Originaleinträge und ihre Identitäten bleiben unverändert.
+
+Die Standard-Testdaten enthalten jetzt befüllte Tier-Objekte, die dieselben Achievement-/Upgrade-Instanzen wie die globalen Register verwenden, einschließlich des Rückverweises vom Upgrade auf sein Gebäude. Neue Fachtests prüfen den zusätzlichen Milchgewinn an einem Meilenstein, die Paketbewertung eines nahen Tier-Upgrades und einen stringbasierten Fortune-Eintrag. Auch die Unveränderlichkeitsprüfung erfasst diese zyklischen Querverweise.
+
+Ein schreibgeschützter Quelltext-Audit erfasst 25 Sammlungstypen aus main.js und vier Minispielskripten. Der Nachweis in tests/game-collections.json enthält ausschließlich Typinformationen, Quell-URLs, Zeilen und Datei-Prüfsummen. Eine zusätzliche AST-Prüfung erkennt direkte Array-Methoden, for-of und Iterable-Spreads auf den bekannten Objektregistern. Diese Prüfung begrenzt sich auf die dokumentierten Felder.
+
+Version 1.0.2: **32 Node-Tests, 10 Browser-Prüfungen und 5 native Erweiterungsprüfungen bestanden**. Die native Prüfung bestätigt ausdrücklich die befüllten Objektregister an Gebäuden und den laufenden Bank-vor-Tempel-Kauf. Ein vollständiger Live-Durchlauf bleibt ungeprüft.
 
 ## Fehlerbehebung 1.0.1
 
@@ -12,7 +22,7 @@ Version 1.0.1: **27 Node-Tests, 10 Browser-Prüfungen und 5 native Erweiterungsp
 
 ## Automatisiert
 
-- 27 Node-Tests: die beiden gewünschten Wirtschaftlichkeitsbeispiele, Upgrade-gegen-Gebäude, Kitten/Milch, Gebäudesynergien, Horizont vor Aufstieg, Bankreserve, verbotene Upgrade-Pools, Null-Einkommen, Unveränderlichkeit des echten Zustands bei der Berechnung und Regressionen für beide Registerformen.
+- 32 Node-Tests: die beiden gewünschten Wirtschaftlichkeitsbeispiele, Upgrade-gegen-Gebäude, Kitten/Milch, Gebäudesynergien, Horizont vor Aufstieg, Bankreserve, verbotene Upgrade-Pools, Null-Einkommen, Unveränderlichkeit bei zyklischen Gebäude-/Upgrade-Referenzen, Regressionen für beide Registerformen und die oben beschriebenen Tier- und Typprüfungen.
 - Strategie-Regressionen: Neverclick, natürliche Lump-Timer, Wrinkler-Eingaben ohne HP-Schreiben, bestätigtes Backup vor Aufstieg, Schutz neuer Gartenpflanzen und Börsengewinn, Ausschluss des Cheat-Achievements, Jahres-Warteziel, exakte Billion, Queenbeet-/Everdaisy-Layouts und reife Juicy-Queenbeet-Ernte.
 - AST-Prüfung des ausgelieferten Engines: keine direkten Ressourcen-/Achievement-Schreibzugriffe, Belohnungsaufrufe, Timer-/RNG-Überschreibungen, Save-Importe oder künstliche Klickbeträge. Manifest-Ziele und alle referenzierten Skripte geprüft. Diese Prüfung ist eine Regression gegen bekannte Cheat-Wege, kein allgemeiner mathematischer Sicherheitsbeweis.
 - 10 Chromium/Chrome-Browser-Prüfungen mit synthetischem Spielvertrag: Start/Pause, bestätigtes Backup, Neverclick, Bankkauf vor Tempel, Export, dynamischer Achievement-Bericht, Zweit-Tab-Sperre, Fortsetzen nach Neuladen und Popup-Transport. Screenshot der Oberfläche visuell geprüft.

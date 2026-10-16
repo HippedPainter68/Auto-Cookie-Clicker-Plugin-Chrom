@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Auto Cookie Clicker Plugin Chrom",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "minimum_chrome_version": "111",
   "description": "Automatischer Cookie-Clicker-Spieler mit Effizienzvergleich, Langzeitstrategie und lokalen Backups.",
   "permissions": ["storage", "activeTab"],

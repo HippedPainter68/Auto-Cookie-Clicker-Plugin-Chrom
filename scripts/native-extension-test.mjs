@@ -23,7 +23,8 @@ try {
   await page.addInitScript({content:`window.Game=(${gameFixture.toString()})();`});
   await page.goto('https://orteil.dashnet.org/cookieclicker/');
   await page.waitForFunction(()=>window.CookiePilot?.status().initialized);
-  assert.deepEqual(await page.evaluate(()=>({achievements:Array.isArray(Game.AchievementsById),upgrades:Array.isArray(Game.UpgradesById)})),{achievements:false,upgrades:false});
+  assert.deepEqual(await page.evaluate(()=>({achievements:Array.isArray(Game.AchievementsById),upgrades:Array.isArray(Game.UpgradesById),tieredAchievs:Array.isArray(Game.Objects.Bank.tieredAchievs),tieredUpgrades:Array.isArray(Game.Objects.Bank.tieredUpgrades)})),{achievements:false,upgrades:false,tieredAchievs:false,tieredUpgrades:false});
+  assert.ok(await page.evaluate(()=>Object.keys(Game.Objects.Bank.tieredAchievs).length && Object.keys(Game.Objects.Bank.tieredUpgrades).length));
   assert.equal(await page.evaluate(()=>CookiePilot.status().running),false);
   results.push('MAIN-world engine initialized with original object registries through real content-script configuration');
   const {targetInfos}=await cdp.send('Target.getTargets',{filter:[{type:'tab',exclude:false}]});

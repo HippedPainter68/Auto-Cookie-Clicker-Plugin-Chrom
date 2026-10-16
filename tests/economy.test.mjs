@@ -60,9 +60,19 @@ test('Bank reserve prevents a superficially affordable purchase', () => {
 });
 test('Planning does not mutate resources, purchases, amounts or achievements', () => {
   const g = example();
-  const before = JSON.stringify(g);
+  const snapshot = () => {
+    const seen = new WeakSet();
+    return JSON.stringify(g, (key, value) => {
+      if (value && typeof value === 'object') {
+        if (seen.has(value)) return { reference:value.id ?? value.name ?? key };
+        seen.add(value);
+      }
+      return value;
+    });
+  };
+  const before = snapshot();
   for (let n = 0; n < 20; n++) economy.plan(g, { clicksPerSecond: 40 });
-  assert.equal(JSON.stringify(g), before);
+  assert.equal(snapshot(), before);
 });
 test('Synergy upgrade includes both buildings', () => {
   const g = example(), b1 = g.Objects.Bank, b2 = g.Objects.Temple;
@@ -82,4 +92,43 @@ test('Upgrade planning accepts both original object and array registries', () =>
     Object.assign(u, { name: 'Discount cookie', unlocked: 1, pool: 'cookie', power: 10, getPrice: () => 10000 });
     assert.equal(economy.plan(g).purchase.name, 'Discount cookie');
   }
+});
+test('A building milestone reads populated tier objects and adds its milk benefit', () => {
+  for (const shape of ['object', 'array']) {
+    const g = gameFixture(shape), bank = g.Objects.Bank;
+    bank.amount = 49; bank.storedCps = 10; bank.storedTotalCps = 490;
+    g.milkProgress = 2; g.cookiesPs = g.unbuffedCps = 588;
+    g.Upgrades['Kitten helpers'] = { bought:1, pool:'normal' };
+    const result = economy.buildingGain(g, bank, economy.context(g, {}));
+    assert.ok(Math.abs(result.delta - 14) < 1e-9);
+    assert.match(result.reason, /Milch/);
+  }
+});
+test('A populated tier-upgrade object produces a building-plus-upgrade plan', () => {
+  for (const shape of ['object', 'array']) {
+    const g = gameFixture(shape), bank = g.Objects.Bank;
+    g.ObjectsById.forEach(b => b.locked = true);
+    Object.assign(bank, { locked:false, amount:49, storedCps:10, storedTotalCps:490 });
+    bank.getPrice = () => 100; bank.getSumPrice = count => count * 100;
+    bank.tieredUpgrades[1].getPrice = () => 50;
+    g.cookies = 1000; g.cookiesPs = g.unbuffedCps = 490;
+    const result = economy.plan(g);
+    assert.equal(result.target.type, 'bundle');
+    assert.equal(result.target.price, 150);
+    assert.equal(result.purchase.type, 'building');
+    assert.equal(result.purchase.count, 1);
+    assert.equal(result.purchase.price, 100);
+  }
+});
+test('String-keyed tier entries are included instead of dropped by array conversion', () => {
+  const g = gameFixture(), bank = g.Objects.Bank;
+  bank.locked = false; bank.amount = 10; bank.storedCps = 10; bank.storedTotalCps = 100;
+  g.cookies = 1000; g.cookiesPs = g.unbuffedCps = 100;
+  const fortune = g.UpgradesById[150];
+  Object.assign(fortune, { name:'Fixture bank fortune', tier:'fortune', unlocked:1, buildingTie1:bank, getPrice:() => 1 });
+  bank.tieredUpgrades.fortune = fortune;
+  const result = economy.plan(g);
+  const option = result.alternatives.find(c => c.type === 'upgrade' && c.id === fortune.id);
+  assert.ok(option);
+  assert.ok(Math.abs(option.delta - 7) < 1e-9);
 });

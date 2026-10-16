@@ -44,7 +44,10 @@ export function gameFixture(indexShape = 'object') {
   };
   g.ObjectsById = names.map((name, id) => ({ id, name, amount: 0, level: 0, locked: id > 1, bought: 0,
     basePrice: id ? 100 * Math.pow(5, id) : 15, storedCps: id ? Math.pow(4, id) : .1,
-    storedTotalCps: 0, tieredAchievs: [], tieredUpgrades: [], synergies: [],
+    storedTotalCps: 0,
+    tieredAchievs: indexShape === 'array' ? [] : {},
+    tieredUpgrades: indexShape === 'array' ? [] : {},
+    synergies: [], productionAchievs: [], pics: [],
     getPrice() { return this.basePrice * Math.pow(1.15, this.amount); },
     getSumPrice(count) { let total = 0; for (let n = 0; n < count; n++) total += this.basePrice * Math.pow(1.15, this.amount + n); return total; },
     getReverseSumPrice(count) { return Math.max(0, count) * this.basePrice * .25; },
@@ -54,5 +57,16 @@ export function gameFixture(indexShape = 'object') {
     levelUp() { if (g.lumps > this.level) { g.lumps -= ++this.level; } }
   }));
   g.Objects = Object.fromEntries(g.ObjectsById.map(b => [b.name, b]));
+  // Real buildings have populated tier dictionaries containing the same instances
+  // as the global registries; tier upgrades also link back to their building.
+  g.Tiers[1] = { unlock:50, achievUnlock:50 };
+  for (const building of g.ObjectsById) {
+    const achievement = g.AchievementsById[400 + building.id];
+    achievement.tier = 1;
+    const upgrade = g.UpgradesById[100 + building.id];
+    upgrade.tier = 1; upgrade.buildingTie1 = building;
+    building.tieredAchievs[1] = achievement;
+    building.tieredUpgrades[1] = upgrade;
+  }
   return g;
 }
