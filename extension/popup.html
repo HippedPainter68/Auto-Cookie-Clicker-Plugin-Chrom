@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="de">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Auto Cookie Clicker</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+  <header><div class="cookie" aria-hidden="true">🍪</div><div><h1>Auto Cookie Clicker</h1><p>Plugin Chrom · Legitimer Langzeitspieler</p></div><span id="state" class="pill">Verbinden</span></header>
+  <main>
+    <div id="error" class="notice error" role="alert" hidden></div>
+    <section class="hero"><p class="eyebrow">AKTUELLES ZIEL</p><h2 id="goal">Cookie Clicker im aktiven Tab öffnen.</h2><p id="hint"></p>
+      <div class="stats"><div><b id="cookies">—</b><span>Cookies</span></div><div><b id="cps">—</b><span>pro Sekunde</span></div><div><b id="progress">—</b><span>legitime Erfolge</span></div></div>
+      <progress id="bar" value="0" max="1" aria-label="Achievement-Fortschritt"></progress>
+      <div class="actions"><button id="toggle" class="primary" disabled>Automatik starten</button><button id="backup">Sichern</button></div>
+    </section>
+    <section><div class="section-title"><h2>Nächste Investition</h2><span class="muted">Gebäude + Upgrades</span></div><div id="decision" class="decision">Noch keine Kaufentscheidung.</div>
+      <div class="table-scroll"><table><thead><tr><th>Kandidat</th><th>+ Cookies/s</th><th>Amortisation</th></tr></thead><tbody id="alternatives"></tbody></table></div>
+      <p class="fine">Modellwerte einschließlich bekannter Synergien und Klickerträge. Spezialeffekte können geschätzt oder unbewertet sein. Es gibt keine Garantie für ein globales Optimum.</p>
+    </section>
+    <section class="settings"><h2>Spielweise</h2><label>Tempo<select id="speed"><option value="eco">Sparsam · bis 5 Klicks/s</option><option value="normal">Normal · bis 10 Klicks/s</option><option value="fast">Turbo · bis 40 Klicks/s</option></select></label>
+      <label>Investitionshorizont<select id="horizon"><option value="0">Automatisch nach Ziel</option><option value="1">1 Stunde</option><option value="24">24 Stunden</option><option value="168">7 Tage</option><option value="720">30 Tage</option><option value="8760">1 Jahr</option><option value="87600">10 Jahre</option></select></label>
+      <p class="fine">Käufe müssen sich innerhalb dieses Zeitraums lohnen. Ein früher erwarteter Ziel-Aufstieg verkürzt den Horizont zusätzlich.</p>
+      <label class="check"><input type="checkbox" id="autoAscend"> Selbstständig aufsteigen und wiedergeboren werden</label>
+      <label class="check"><input type="checkbox" id="resume"> Nach dem Laden automatisch fortsetzen</label>
+      <label class="check"><input type="checkbox" id="windowAchievements"> Fenster-Erfolge automatisch (Fenster wird kurz kleiner)</label>
+      <p class="fine">Turbo beschleunigt die Bedienung. Produktion, Reifezeit und Zufall bleiben unverändert. Browser und Spiel müssen laufen; Hintergrund-Tabs können gedrosselt werden.</p>
+    </section>
+    <details><summary>Achievements und Abdeckung <span id="missingCount"></span></summary><p class="fine">„Cheated cookies taste awful“ ist ausgeschlossen. Fenster-Erfolge verkleinern bei aktivierter Option das echte Chrome-Fenster kurzzeitig. Offene Erfolge sind keine Zusage vollständiger Automatisierung.</p><input id="search" type="search" placeholder="Erfolge durchsuchen …" aria-label="Erfolge durchsuchen"><div id="achievements" class="achievement-list"></div><button id="report">Fortschrittsbericht herunterladen</button></details>
+    <details><summary>Sicherungen und Aktivität</summary><p id="lastBackup" class="fine">Noch keine Sicherung in dieser Sitzung.</p><div class="actions"><button id="export">Spielstand exportieren</button><button id="saved">Backup herunterladen</button></div><p class="fine">Bis zu 14 Sicherungen lokal in Chrome, einschließlich der ersten Sicherung und Aufstiegs-Backups. Zum Wiederherstellen Bot pausieren, neueste passende Textdatei im Spiel unter Optionen → Spielstand importieren einfügen und die Spielseite neu laden.</p><ol id="logs"></ol></details>
+    <p id="compatibility" class="notice" hidden></p>
+  </main>
+  <footer>Keine Ressourcen-Cheats · Kein Remote-Code · Lokale Sicherungen<br><span id="version"></span></footer>
+  <script src="popup.js"></script>
+</body></html>

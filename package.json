@@ -1,0 +1,18 @@
+{
+  "name": "cookiepilot-legit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lokale Chrome-Erweiterung für Cookie Clicker mit bereinigter CookieBot-Strategie",
+  "license": "GPL-3.0-only",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "node scripts/browser-test.mjs",
+    "package": "node scripts/package.mjs"
+  },
+  "devDependencies": {
+    "acorn": "8.15.0",
+    "fflate": "0.8.3",
+    "playwright": "1.56.1"
+  }
+}

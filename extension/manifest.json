@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Cookie Clicker Plugin Chrom",
+  "version": "1.0.0",
+  "minimum_chrome_version": "111",
+  "description": "Automatischer Cookie-Clicker-Spieler mit Effizienzvergleich, Langzeitstrategie und lokalen Backups.",
+  "permissions": ["storage", "activeTab"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_popup": "popup.html", "default_title": "Auto Cookie Clicker" },
+  "content_scripts": [
+    {
+      "matches": ["https://orteil.dashnet.org/cookieclicker/*", "http://orteil.dashnet.org/cookieclicker/*", "https://cookieclicker.eu/cookieclicker/*"],
+      "exclude_matches": ["*://orteil.dashnet.org/cookieclicker/beta/*"],
+      "js": ["bridge.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://orteil.dashnet.org/cookieclicker/*", "http://orteil.dashnet.org/cookieclicker/*", "https://cookieclicker.eu/cookieclicker/*"],
+      "exclude_matches": ["*://orteil.dashnet.org/cookieclicker/beta/*"],
+      "js": ["economy.js", "vendor/strategy.js", "runner.js"],
+      "world": "MAIN",
+      "run_at": "document_idle"
+    }
+  ]
+}
