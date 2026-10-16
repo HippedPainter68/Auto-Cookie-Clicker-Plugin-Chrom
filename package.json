@@ -8,6 +8,7 @@
     "build": "node scripts/build.mjs",
     "test": "node --test tests/*.test.mjs",
     "test:browser": "node scripts/browser-test.mjs",
+    "test:native": "node scripts/native-extension-test.mjs",
     "package": "node scripts/package.mjs"
   },
   "devDependencies": {

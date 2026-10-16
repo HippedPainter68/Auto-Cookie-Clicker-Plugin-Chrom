@@ -11,7 +11,9 @@ Auto Cookie Clicker Plugin Chrom als öffentliches, installierbares Chrome-Plugi
 - [x] Automatisches Vermächtnis/Aufstieg/Wiedergeburt und permanente Upgrade-Slots.
 - [x] Garten- und Minispielregeln anhand von Wiki und aktuellem Spielcode überprüfen; Korrekturen und Wissensgrenzen dokumentieren.
 - [x] Automatisierte Tests, isolierter Browser-Test und Installationspaket fertigstellen.
-- [ ] Öffentliches GitHub-Repository `Auto-Cookie-Clicker-Plugin-Chrom` erstellen und geprüften Stand hochladen.
+- [x] Native Erweiterungsinstallation, echte Nachrichtenverbindung und lokalen Erweiterungsspeicher in einem separaten Chrome-Testprofil prüfen.
+- [x] Öffentliches GitHub-Repository `Auto-Cookie-Clicker-Plugin-Chrom` erstellen und geprüften Quellcode hochladen.
+- [ ] Version 1.0.0 als öffentliches Test-Release mit installierbarem ZIP hochladen.
 
 ## Feste Grenzen
 
