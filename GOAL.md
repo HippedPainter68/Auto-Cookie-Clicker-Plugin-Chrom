@@ -13,7 +13,7 @@ Auto Cookie Clicker Plugin Chrom als öffentliches, installierbares Chrome-Plugi
 - [x] Automatisierte Tests, isolierter Browser-Test und Installationspaket fertigstellen.
 - [x] Native Erweiterungsinstallation, echte Nachrichtenverbindung und lokalen Erweiterungsspeicher in einem separaten Chrome-Testprofil prüfen.
 - [x] Öffentliches GitHub-Repository `Auto-Cookie-Clicker-Plugin-Chrom` erstellen und geprüften Quellcode hochladen.
-- [ ] Version 1.0.0 als öffentliches Test-Release mit installierbarem ZIP hochladen.
+- [x] Version 1.0.0 als öffentliches Test-Release mit installierbarem ZIP hochladen und heruntergeladene Datei gegen die lokale SHA256-Prüfsumme prüfen.
 
 ## Feste Grenzen
 
