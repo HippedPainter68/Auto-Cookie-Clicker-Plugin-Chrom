@@ -149,7 +149,7 @@
           confidence: 'Schätzung', reason: `${count} Gebäude + ${u.name} als Paket` }, count);
       }
     }
-    if (options.allowUpgrades !== false) for (const u of g.UpgradesById || []) {
+    if (options.allowUpgrades !== false) for (const u of Object.values(g.UpgradesById || {})) {
       if (!u.unlocked || u.bought || ['prestige','debug','toggle'].includes(u.pool) || u.priceLumps > 0 || options.avoid?.(u)) continue;
       const gain = upgradeGain(g, u, ctx), price = u.getPrice();
       add(u, 'upgrade', price, gain);

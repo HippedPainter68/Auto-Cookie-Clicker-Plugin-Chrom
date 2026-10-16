@@ -6,8 +6,8 @@ import { gameFixture } from './fixtures.mjs';
 const context = vm.createContext({});
 vm.runInContext(readFileSync('extension/economy.js', 'utf8'), context);
 const economy = context.CookiePilotEconomy;
-function example() {
-  const g = gameFixture();
+function example(indexShape) {
+  const g = gameFixture(indexShape);
   g.cookies = 1e9; g.cookiesPs = g.unbuffedCps = 100000;
   for (const b of g.ObjectsById) b.locked = true;
   const bank = g.Objects.Bank, temple = g.Objects.Temple;
@@ -49,7 +49,7 @@ test('Kitten ROI uses milk and milk modifiers', () => {
 });
 test('Avoid debug, prestige, toggle, sugar-lump prices and challenge upgrades', () => {
   const g = example();
-  g.UpgradesById.slice(0, 4).forEach((u, n) => Object.assign(u, { unlocked: 1, power: 1000, getPrice: () => 1,
+  Object.values(g.UpgradesById).slice(0, 4).forEach((u, n) => Object.assign(u, { unlocked: 1, power: 1000, getPrice: () => 1,
     pool: ['debug','prestige','toggle','cookie'][n], priceLumps: n === 3 ? 1 : 0 }));
   assert.ok(economy.plan(g).alternatives.every(c => c.type === 'building'));
   assert.ok(economy.plan(g, { allowUpgrades: false }).alternatives.every(c => c.type === 'building'));
@@ -75,4 +75,11 @@ test('Synergy upgrade includes both buildings', () => {
 test('Zero income produces no fictitious bank or free purchase', () => {
   const g = example(); g.cookies = g.cookiesPs = g.unbuffedCps = 0;
   const p = economy.plan(g); assert.equal(p.purchase, null); assert.equal(p.target, null);
+});
+test('Upgrade planning accepts both original object and array registries', () => {
+  for (const indexShape of ['object', 'array']) {
+    const g = example(indexShape), u = g.UpgradesById[0];
+    Object.assign(u, { name: 'Discount cookie', unlocked: 1, pool: 'cookie', power: 10, getPrice: () => 10000 });
+    assert.equal(economy.plan(g).purchase.name, 'Discount cookie');
+  }
 });

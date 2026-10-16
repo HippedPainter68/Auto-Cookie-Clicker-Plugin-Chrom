@@ -1,5 +1,5 @@
 // Synthetic game contract for deterministic regression tests; never a real user save.
-export function gameFixture() {
+export function gameFixture(indexShape = 'object') {
   const names = ['Cursor','Grandma','Farm','Mine','Factory','Bank','Temple','Wizard tower','Shipment','Alchemy lab','Portal','Time machine','Antimatter condenser','Prism','Chancemaker','Fractal engine','Javascript console','Idleverse','Cortex baker','You'];
   const achievements = Array.from({ length: 700 }, (_, id) => ({ id, name: 'Achievement ' + id, desc: '', ddesc: '', won: 0, pool: 'normal', click() {} }));
   const byName = Object.fromEntries(achievements.map(a => [a.name, a]));
@@ -23,7 +23,10 @@ export function gameFixture() {
     wrinklers: [], wrinklerHP: 3, season: '', seasonUses: 0, dragonLevel: 0, dragonLevels: Array(30).fill({}),
     milkProgress: 0, milkHd: 0, windowW: 1200, tickerTooNarrow: 900, CanClick: 1, dragonAura:0, dragonAura2:0,
     keys: [], buffs: {}, TickerEffect: 0, shimmers: [], shimmerTypes: { golden: { n: 0, time: 0 } },
-    AchievementsById: achievements, Achievements: byName, UpgradesById: upgrades,
+    // Cookie Clicker's main.js uses objects for these two registries, not arrays.
+    AchievementsById: indexShape === 'array' ? achievements : Object.fromEntries(achievements.map(a => [a.id, a])),
+    Achievements: byName,
+    UpgradesById: indexShape === 'array' ? upgrades : Object.fromEntries(upgrades.map(u => [u.id, u])),
     Upgrades: new Proxy(up, { get(target, key) { return target[key] ?? absentUpgrade; } }),
     UpgradesInStore: [], Tiers: {}, BankAchievements: [], CpsAchievements: [], Notes: [],
     Has(name) { return !!this.Upgrades[name]?.bought; }, HasAchiev(name) { return !!this.Achievements[name]?.won; },

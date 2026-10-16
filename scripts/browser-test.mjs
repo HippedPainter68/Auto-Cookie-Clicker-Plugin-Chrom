@@ -25,6 +25,7 @@ try {
   await page.addInitScript({ content: storageMock + `\nwindow.Game=(${gameFixture.toString()})();\n` + sources.join('\n;\n') });
   await page.goto('https://orteil.dashnet.org/cookieclicker/');
   await page.waitForFunction(() => window.CookiePilot?.status().initialized);
+  assert.deepEqual(await page.evaluate(() => ({ achievements:Array.isArray(Game.AchievementsById), upgrades:Array.isArray(Game.UpgradesById) })), { achievements:false, upgrades:false });
   async function command(command, value, target = page) {
     return target.evaluate(({ command, value }) => new Promise(resolve => {
       window.__messageHandler({ channel: 'cookiepilot-legit-v1', command, value }, {}, resolve);
@@ -36,7 +37,7 @@ try {
   assert.equal(await page.evaluate(() => Game.cookieClicks), 0); results.push('Fresh-game Neverclick protected');
   await command('pause');
   await page.evaluate(() => {
-    Game.AchievementsById.forEach(a => a.won=1); Game.AchievementsById[82].won=0;
+    Object.values(Game.AchievementsById).forEach(a => a.won=1); Game.AchievementsById[82].won=0;
     Game.resets=1; Game.prestige=1; Game.cookies=1e9; Game.cookiesPs=Game.unbuffedCps=100000;
     Game.ObjectsById.forEach(b => b.locked=true);
     Game.Objects.Cursor.storedTotalCps=100000;

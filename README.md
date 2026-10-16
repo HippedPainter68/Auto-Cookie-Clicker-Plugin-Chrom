@@ -26,6 +26,12 @@ Kein `npm`, keine Konsole und kein Tampermonkey für die Installation nötig. Di
 
 Bei einem neuen Spiel wartet der Bot für True Neverclick auf natürliche goldene Cookies und kauft für Hardcore zunächst keine Upgrades. Das kann lange ruhig aussehen. Den großen Cookie in dieser Phase nicht selbst anklicken.
 
+## Vorhandene Installation aktualisieren
+
+Das neue Erweiterungs-ZIP herunterladen und seine Dateien in den bisherigen Erweiterungsordner kopieren und ersetzen. Anschließend unter `chrome://extensions` bei **Auto Cookie Clicker Plugin Chrom** auf **Neu laden** (Kreispfeil) klicken und die Cookie-Clicker-Spielseite neu laden. Verwende denselben Ordner, damit die Erweiterungs-ID, Einstellungen und lokalen Backups erhalten bleiben.
+
+Version **1.0.1** behebt `game.AchievementsById.filter is not a function`: Cookie Clicker verwendet Objekte für seine Achievement- und Upgrade-Register. Die bisherigen Testdaten hatten diese als Arrays nachgebildet; die Tests verwenden nun die tatsächliche Datenform und prüfen zusätzlich die Array-Variante.
+
 ## Wie er investiert
 
 Ein Tempel mit +20.000 CpS für 80 Millionen kostet 4.000 Sekunden zusätzlicher Produktion. Eine Bank mit +8.700 CpS für 17 Millionen kostet rund 1.954 Sekunden. Unter diesen Bedingungen gewinnt die Bank. Ein 500-Millionen-Upgrade für +2 % wird mit dem aktuellen Zusatzgewinn bewertet und ebenfalls mit Gebäuden verglichen.

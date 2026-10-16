@@ -116,7 +116,9 @@
     if (initialized || !window.Game?.ready || !configured) return;
     game = window.Game;
     const required = ['registerMod','ClickCookie','Has','HasAchiev','WriteSave','Ascend','Reincarnate','isMinigameReady'];
-    if (required.some(name => typeof game[name] !== 'function') || !game.ObjectsById?.length || !game.AchievementsById?.length) {
+    const achievementsReady = Object.values(game.AchievementsById || {}).some(a => a && typeof a.name === 'string');
+    const upgradesReady = Object.values(game.UpgradesById || {}).some(u => u && typeof u.name === 'string');
+    if (required.some(name => typeof game[name] !== 'function') || !game.ObjectsById?.length || !achievementsReady || !upgradesReady) {
       error = 'Diese Spielversion stellt benötigte Schnittstellen nicht bereit.'; return;
     }
     try {
@@ -171,10 +173,10 @@
     else fail(err);
   }
   function achievements() {
-    if (!game) return [];
+    if (!game?.AchievementsById) return [];
     const waiting = new Set(['Just plain lucky','So much to do so much to see','All-natural cane sugar','Last Chance to See']);
-      const manual = new Set(['Cookie-dunker','Stifling the press']);
-    return game.AchievementsById.filter(Boolean).map(a => ({ id: a.id, name: a.name,
+    const manual = new Set(['Cookie-dunker','Stifling the press']);
+    return Object.values(game.AchievementsById).filter(a => a && typeof a.name === 'string').map(a => ({ id: a.id, name: a.name,
       description: strip(a.ddesc || a.desc), won: !!a.won, shadow: a.pool === 'shadow',
       status: a.won ? 'Erreicht' : a.name === 'Cheated cookies taste awful' ? 'Ausgeschlossen: erfordert Cheaten' :
         a.pool === 'dungeon' ? 'Im Spiel nicht verfügbar' : manual.has(a.name) ?

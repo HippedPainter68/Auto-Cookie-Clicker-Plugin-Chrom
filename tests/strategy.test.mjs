@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import { readFileSync } from 'node:fs';
 import { gameFixture } from './fixtures.mjs';
-function setup() {
-  const game = gameFixture(), calls = [];
+function setup(indexShape) {
+  const game = gameFixture(indexShape), calls = [];
   const hooks = { state: {}, settings: { autoAscend: true }, log: () => {}, persist: () => {},
     checkpoint: () => true, isInputBusy: () => false, pokeWrinkler: w => calls.push(w), choosePurchase: () => {}, clickElf() {}, windowAchievements() {} };
   const context = vm.createContext({ console, Date, document: { getElementById() { return null; }, querySelector() { return null; } } });
@@ -38,13 +38,13 @@ test('Ascension waits for a new seed and for a market-profit goal', () => {
   game.Objects.Bank.minigame = { profit: 1e7 }; bot.doAscend('test'); assert.equal(game.OnAscend, false);
 });
 test('Cheat-only achievement never becomes the next goal', () => {
-  const { game, bot } = setup(); game.AchievementsById.forEach(a => a.won = 1);
+  const { game, bot } = setup(); Object.values(game.AchievementsById).forEach(a => a.won = 1);
   game.Achievements['Cheated cookies taste awful'].won = 0;
-  game.UpgradesById.forEach(u => u.bought = 1);
+  Object.values(game.UpgradesById).forEach(u => u.bought = 1);
   assert.equal(bot.checkAllAchievementsOK(), true); assert.equal(bot.finished, true);
 });
 test('Legacy year wait remains an unfinished legitimate goal', () => {
-  const { game, bot } = setup(); game.AchievementsById.forEach(a => a.won = 1);
+  const { game, bot } = setup(); Object.values(game.AchievementsById).forEach(a => a.won = 1);
   game.Achievements['So much to do so much to see'].won = 0;
   assert.equal(bot.checkAllAchievementsOK(), false);
   assert.equal(bot.nextAchievement, game.Achievements['So much to do so much to see'].id);
@@ -77,4 +77,28 @@ test('Ripe Juicy Queenbeet is harvested without waiting for a production combo',
   const garden = { isTileUnlocked:(x,y) => x===0&&y===0, getTile:() => tile,
     plantsById:[{ key:'queenbeetLump', unlocked:true, mature:85 }], harvest() { tile=[0,0]; harvested++; } };
   bot.harvesting(garden); assert.equal(harvested,1);
+});
+test('Fixture mirrors the original object registries and keeps shared entries', () => {
+  const game = gameFixture();
+  assert.equal(Array.isArray(game.AchievementsById), false);
+  assert.equal(Array.isArray(game.UpgradesById), false);
+  assert.equal(game.AchievementsById.length, undefined);
+  assert.equal(game.UpgradesById.length, undefined);
+  assert.equal(game.AchievementsById[game.Achievements.Hardcore.id], game.Achievements.Hardcore);
+  assert.equal(game.UpgradesById[game.Upgrades['Lucky payout'].id], game.Upgrades['Lucky payout']);
+});
+test('Strategy goal selection accepts both object and array registries', () => {
+  for (const indexShape of ['object', 'array']) {
+    const { game, bot } = setup(indexShape);
+    Object.values(game.AchievementsById).forEach(a => a.won = 1);
+    game.Achievements['So much to do so much to see'].won = 0;
+    bot.checkAllAchievementsOK();
+    assert.equal(bot.nextAchievement, game.Achievements['So much to do so much to see'].id);
+    Object.values(game.AchievementsById).forEach(a => a.won = 1);
+    Object.values(game.UpgradesById).forEach(u => u.bought = 1);
+    game.Upgrades['Lucky payout'].bought = 0;
+    game.Upgrades['Lucky payout'].pool = 'prestige';
+    bot.checkAllAchievementsOK();
+    assert.match(bot.mainActivity, /Lucky payout/);
+  }
 });

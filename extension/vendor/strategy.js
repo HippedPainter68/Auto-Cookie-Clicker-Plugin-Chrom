@@ -1469,7 +1469,7 @@ AutoPlay.doAscend = function(reason, log) {
   Game.Ascend(true); AutoPlay.onAscend = true;
 };
 AutoPlay.checkAllAchievementsOK = function() {
-  const pending = Game.AchievementsById.filter(a => legitAchievement(a) && !a.won);
+  const pending = Object.values(Game.AchievementsById).filter(a => legitAchievement(a) && !a.won);
   const late = new Set(AutoPlay.lateAchievements);
   // Finish the market before long waits; keeping the run protects Gaseous assets.
   const marketGoal = Game.Achievements['Gaseous assets'];
@@ -1483,7 +1483,7 @@ AutoPlay.checkAllAchievementsOK = function() {
     AutoPlay.setMainActivity('Ziel: ' + next.name + ' – ' + (next.ddesc || next.desc || '').replace(/<[^>]*>/g, ''));
     return false;
   }
-  const missing = Game.UpgradesById.find(u => u.pool === 'prestige' && !u.bought);
+  const missing = Object.values(Game.UpgradesById).find(u => u.pool === 'prestige' && !u.bought);
   if (missing) {
     AutoPlay.nextAchievement = 99;
     AutoPlay.setMainActivity('Himmlisches Upgrade: ' + missing.name); return false;
@@ -1615,7 +1615,7 @@ AutoPlay.switchSoil = function(garden, sector, name) {
 };
 // Rebuild arrays defensively for additive game updates. Never invent or unlock entries.
 AutoPlay.wantedAchievements = AutoPlay.wantedAchievements.filter(id => legitAchievement(Game.AchievementsById[id]));
-for (const a of Game.AchievementsById) {
+for (const a of Object.values(Game.AchievementsById)) {
   if (legitAchievement(a) && /Bake <b>|Bake [\d<]/i.test(a.desc || '') && !AutoPlay.wantedAchievements.includes(a.id)) {
     AutoPlay.wantedAchievements.splice(Math.max(3, AutoPlay.wantedAchievements.length - 3), 0, a.id);
   }

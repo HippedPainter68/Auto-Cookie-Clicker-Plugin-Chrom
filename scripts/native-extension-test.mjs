@@ -23,8 +23,9 @@ try {
   await page.addInitScript({content:`window.Game=(${gameFixture.toString()})();`});
   await page.goto('https://orteil.dashnet.org/cookieclicker/');
   await page.waitForFunction(()=>window.CookiePilot?.status().initialized);
+  assert.deepEqual(await page.evaluate(()=>({achievements:Array.isArray(Game.AchievementsById),upgrades:Array.isArray(Game.UpgradesById)})),{achievements:false,upgrades:false});
   assert.equal(await page.evaluate(()=>CookiePilot.status().running),false);
-  results.push('MAIN-world engine auto-injected only after real content-script configuration');
+  results.push('MAIN-world engine initialized with original object registries through real content-script configuration');
   const {targetInfos}=await cdp.send('Target.getTargets',{filter:[{type:'tab',exclude:false}]});
   const tabTarget=targetInfos.find(t=>t.url==='https://orteil.dashnet.org/cookieclicker/');
   if (!tabTarget) throw new Error('Native test tab target unavailable: '+JSON.stringify(targetInfos));
@@ -49,7 +50,7 @@ try {
   await popup.locator('#toggle').click();
   await page.waitForFunction(()=>!CookiePilot.status().running);
   await page.evaluate(()=>{
-    Game.AchievementsById.forEach(a=>a.won=1);Game.AchievementsById[82].won=0;
+    Object.values(Game.AchievementsById).forEach(a=>a.won=1);Game.AchievementsById[82].won=0;
     Game.resets=1;Game.prestige=1;Game.cookies=1e9;Game.cookiesPs=Game.unbuffedCps=100000;
     Game.ObjectsById.forEach(b=>b.locked=true);Game.Objects.Cursor.storedTotalCps=100000;
     Object.assign(Game.Objects.Bank,{locked:false,basePrice:17e6,storedCps:8700});
