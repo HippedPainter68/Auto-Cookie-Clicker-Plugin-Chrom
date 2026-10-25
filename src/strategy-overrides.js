@@ -149,6 +149,19 @@ AutoPlay.canContinue = function() {
   }
   return false;
 };
+AutoPlay.assignPermanentSlot = function(slot, options) {
+  if (!Game.UpgradesById[264 + slot]?.bought) return;
+  for (let i = options.length - 1; i >= 0; i--) {
+    const upgrade = Game.UpgradesById[options[i]];
+    if (!upgrade?.bought || !upgrade.unlocked || upgrade.noPerm || !['', 'cookie'].includes(upgrade.pool)) continue;
+    if (Game.permanentUpgrades.some((id, other) => other !== slot && id === upgrade.id)) continue;
+    if (Game.permanentUpgrades[slot] === upgrade.id) return;
+    Game.AssignPermanentSlot(slot);
+    Game.PutUpgradeInPermanentSlot(upgrade.id, slot);
+    Game.ConfirmPrompt();
+    return;
+  }
+};
 AutoPlay.doReincarnate = function() {
   AutoPlay.onAscend = false;
   AutoPlay.delay = 10;
@@ -314,7 +327,8 @@ AutoPlay.run = function() {
   if (AutoPlay.now < AutoPlay.deadline) return;
   AutoPlay.activities = AutoPlay.mainActivity;
   AutoPlay.deadline = AutoPlay.now + 5000;
-  if (Game.AchievementsById[AutoPlay.nextAchievement]?.won || AutoPlay.finished) AutoPlay.findNextAchievement();
+  // Keep a completed target until its automatic ascension has finished.
+  if (AutoPlay.finished || (!hooks.settings.autoAscend && Game.AchievementsById[AutoPlay.nextAchievement]?.won)) AutoPlay.findNextAchievement();
   AutoPlay.handleSugarLumps();
   AutoPlay.handleSavings();
   AutoPlay.handleSeasons();

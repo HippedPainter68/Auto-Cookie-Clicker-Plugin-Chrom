@@ -4,6 +4,7 @@ import path from 'node:path';
 import { mkdir, writeFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import { gameFixture } from '../tests/fixtures.mjs';
+import { prepareLegacy } from '../tests/legacy-fixture.mjs';
 await mkdir('artifacts', { recursive:true });
 const context = await chromium.launchPersistentContext(path.resolve('artifacts/native-profile'), {
   executablePath: process.env.COOKIEPILOT_CHROME_PATH || path.join(process.env.PROGRAMFILES || 'C:/Program Files', 'Google/Chrome/Application/chrome.exe'),
@@ -67,6 +68,32 @@ try {
   results.push('Native installed engine buys Bank before Temple in the user example');
   await popup.locator('#toggle').click(); // refresh first if the most recent status is still paused
   await page.evaluate(()=>CookiePilot.pause());
+  await worker.evaluate(async()=>{
+    const key='settings:https://orteil.dashnet.org/cookieclicker/';
+    const saved=await chrome.storage.local.get(key);
+    await chrome.storage.local.set({[key]:{...saved[key],autoAscend:true,windowAchievements:false}});
+  });
+  const legacy=await context.newPage();
+  legacy.on('pageerror',e=>errors.push(e.message));
+  await legacy.addInitScript({content:`window.Game=(${gameFixture.toString()})();(${prepareLegacy.toString()})(window.Game);`});
+  await legacy.goto('https://orteil.dashnet.org/cookieclicker/');
+  await legacy.waitForFunction(()=>window.CookiePilot?.status().initialized);
+  await legacy.evaluate(()=>CookiePilot.start());
+  await legacy.evaluate(()=>Game.AchievementsById[82].won=1);
+  await legacy.waitForFunction(()=>Game.AscendTimer>0);
+  const ascensionBackups=await worker.evaluate(async()=>{
+    const saved=await chrome.storage.local.get('backups:https://orteil.dashnet.org/cookieclicker/');
+    return saved['backups:https://orteil.dashnet.org/cookieclicker/'].filter(b=>b.reason.startsWith('Vor Aufstieg'));
+  });
+  assert.ok(ascensionBackups.length);
+  await legacy.evaluate(()=>Game.finishAscension());
+  await legacy.waitForFunction(()=>Game.ReincarnateTimer>0);
+  const cycle=await legacy.evaluate(()=>({chips:Game.heavenlyChips,spent:Game.heavenlyChipsSpent,slot:Game.permanentUpgrades[0],actions:Game.legacyActions,error:CookiePilot.status().error}));
+  assert.deepEqual(cycle,{chips:99,spent:101,slot:0,actions:['ascend','buy:363','buy:264','reincarnate'],error:''});
+  const previousClicks=await legacy.evaluate(()=>{Game.finishReincarnation();return Game.cookieClicks;});
+  await legacy.waitForFunction(before=>Game.cookieClicks>before,previousClicks);
+  await legacy.evaluate(()=>CookiePilot.pause()); await legacy.close(); await page.bringToFront();
+  results.push('Native legacy cycle confirms backup, pays heavenly chips, assigns slot and resumes after reincarnation');
   await popup.reload(); await popup.waitForFunction(()=>document.getElementById('decision').textContent.includes('Bank'));
   await popup.setViewportSize({width:440,height:1300});
   await popup.evaluate(()=>window.scrollTo(0,0));

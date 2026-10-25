@@ -26,7 +26,7 @@ const replacements = new Set([
   'cheatGoldenCookies', 'cheatSugarLumps', 'grindingCheat', 'handleClicking', 'speedClicking',
   'handleSugarLumps', 'handleWrinklers', 'handleSmallAchievements', 'unDunk', 'redeemPresent',
   'canContinue', 'doReincarnate', 'doAscend', 'checkAllAchievementsOK', 'handleNotes',
-  'findNextAchievement',
+  'findNextAchievement', 'assignPermanentSlot',
   'leaveGame', 'debugLogging', 'logging', 'showLog', 'cleanLog', 'info', 'whatTheBotIsDoing',
   'handleSeasons', 'unElf', 'handleGoldenCookies', 'handleStockMarket', 'bestBuy'
 ]);
@@ -46,6 +46,7 @@ for (const node of tree.body) {
 for (const [a, b] of ranges.sort((a, b) => b[0] - a[0])) source = source.slice(0, a) + source.slice(b);
 source = source.replaceAll('AutoPlay.grindingCheat()', 'false').replaceAll('AutoPlay.Config.CheatGolden', '0');
 source = source.replace("if (AutoPlay.endPhase() && !Game.Achievements[\"Endless cycle\"].won &&", "if (!Game.Achievements[\"Endless cycle\"].won &&");
+source = source.replace('AutoPlay.handleAscend = function() {', 'AutoPlay.handleAscend = function() {\n  if (!hooks.settings.autoAscend) return;');
 // These declarations no longer have a feature or a setting in this fork.
 source = source.replace(/^AutoPlay\.cheat\w* = .*;.*$/gm, '');
 const overrides = await readFile('src/strategy-overrides.js', 'utf8');

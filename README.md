@@ -19,7 +19,7 @@ Kein `npm`, keine Konsole und kein Tampermonkey für die Installation nötig. Di
 - **Start/Pause:** stoppt bzw. startet die Spielaktionen. Menü oder Bestätigungsdialog im Spiel pausiert die laufende Steuerung vorübergehend.
 - **Tempo:** 5, 10 oder bis zu 40 normale Klickversuche pro Sekunde; die Spiellimits gelten weiterhin.
 - **Investitionshorizont:** automatisch nach Ziel oder 1 Stunde bis 10 Jahre. Ein vermuteter früherer Ziel-Aufstieg verkürzt ihn. Der Bot spart, wenn ein Kauf sich voraussichtlich nicht rechtzeitig bezahlt macht.
-- **Automatischer Aufstieg:** kann deaktiviert werden. Aktiviert erlaubt er reguläre Aufstiege, Wiedergeburt, himmlische Käufe, permanente Slots und nötige Born-Again-Durchläufe.
+- **Automatischer Aufstieg:** im Popup **Selbstständig aufsteigen und wiedergeboren werden** aktivieren. Der Bot steigt nach seiner Zielstrategie auf, kauft verfügbare und bezahlbare himmlische Upgrades, belegt freigeschaltete permanente Slots und startet den nächsten Lauf. Nötige Born-Again-Durchläufe wählt er selbst. Ausgeschaltet wartet er auch bei einem manuell geöffneten himmlischen Bildschirm.
 - **Fortsetzen:** merkt sich Start/Pause lokal und setzt beim erneuten Laden des Spiels fort.
 - **Fenster-Erfolge:** optional wird das echte Chrome-Fenster kurz verkleinert und anschließend wiederhergestellt. Für Cookie-dunker muss zuvor genug Milch vorhanden sein. Wenn ausgeschaltet, bleiben diese zwei Erfolge manuell erreichbar.
 - **Backups:** vor dem ersten Start, vor Fortsetzungen, etwa alle 15 Minuten und vor Aufstiegen. Bis zu 14 lokale Sicherungen einschließlich der ersten und mehrerer Aufstiegsstände. Export über das Popup; keine Sicherungen werden hochgeladen.
@@ -39,6 +39,8 @@ Ein Tempel mit +20.000 CpS für 80 Millionen kostet 4.000 Sekunden zusätzlicher
 Das Modell berücksichtigt bekannte Tier-Boni, Gebäudesynergien, Milch/Kätzchen, Finger-/Maus-Upgrades, Keks-Multiplikatoren, Klickrate, Bankreserve, Kaufwartezeit und nahe Tier-Freischaltungen. Es verändert zur Berechnung keine echten Spielwerte. Nicht modellierte Spezialeffekte werden im herunterladbaren JSON-Bericht sichtbar. Es handelt sich um ein nachvollziehbares heuristisches Modell; perfekte globale Optimierung und alle möglichen Endgame-Kombos werden nicht behauptet.
 
 ## Langzeitstrategie und Grenzen
+
+Version **1.0.3** korrigiert den Vermächtnis-Ablauf: Ein erreichtes Ziel bleibt bis zum zugehörigen automatischen Aufstieg erhalten. Permanente Slots erhalten nur bereits gekaufte, freigeschaltete und im normalen Dialog erlaubte Upgrades; bereits anderweitig belegte Upgrades werden übersprungen. Bei deaktivierter Aufstiegsautomatik gibt der Bot auch im himmlischen Bildschirm keine Chips aus und löst keine Wiedergeburt aus.
 
 Garten-Züchtungen, reguläre Zuckerklumpen, Pantheon, Grimoire, Börse, Jahreszeiten, Santa, Krumblor und Aufstiege sind integriert. [Strategien, Quellen und konkrete Abdeckung](docs/STRATEGIEN.md) erklären die Regeln und noch fehlende Optimierungen. [Projektziel](GOAL.md) und [Testbericht](docs/TESTBERICHT.md) dokumentieren den Stand.
 

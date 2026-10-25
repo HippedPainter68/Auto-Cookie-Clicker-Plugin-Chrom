@@ -17,6 +17,11 @@ Auto Cookie Clicker Plugin Chrom als öffentliches, installierbares Chrome-Plugi
 - [x] Fehler aus dem echten Spiel behoben: Objektregister für Achievements und Upgrades unterstützt, 27 Node-Tests sowie 10 Browser- und 5 native Erweiterungsprüfungen mit korrigierten Testdaten bestanden und Version 1.0.1 veröffentlicht. Öffentliches ZIP heruntergeladen, Prüfsumme und Manifest-Version bestätigt.
 - [x] Weitere Objektregister korrigiert: Gebäude-Tiers unterstützt, 25 Sammlungstypen aus fünf Original-Spielskripten dokumentiert, befüllte Tier-Register und ihre Kauf-/Milcheffekte geprüft. 32 Node-Tests sowie 10 Browser- und 5 native Erweiterungsprüfungen bestanden. Version 1.0.2 öffentlich veröffentlicht; heruntergeladenes ZIP, Prüfsumme, Manifest und getestete Kaufplanung bestätigt.
 
+## Vermächtnis-Prüfung vom 25.10.2026
+
+- [x] Zielwechsel vor dem vorgesehenen Aufstieg korrigiert, ausgeschaltete Automatik auch im himmlischen Bildschirm respektiert und permanente Slots auf regulär auswählbare Upgrades begrenzt.
+- [ ] Aufstieg mit bestätigtem Backup, reguläre Chip-Ausgaben, Slot-Zuweisung und Wiedergeburt als zusammenhängenden Ablauf testen und ein aktualisiertes ZIP veröffentlichen.
+
 ## Feste Grenzen
 
 Keine künstlichen Cookies, Zuckerklumpen oder goldenen Cookies; keine beschleunigten Spieltimer; kein Vorhersagen/Ändern der RNG-Seeds und kein Save-Rerolling. „Cheated cookies taste awful“ ist definitionsgemäß ausgeschlossen. Zufalls- und Zeit-Erfolge brauchen echte Zeit. Alle legitimen Achievements sind das Ziel, eine vollständig bewiesene End-to-End-Automatisierung sämtlicher Spielphasen ist kein behaupteter Lieferstatus. Neue Spielversionen und nicht modellierte Spezialeffekte werden kenntlich gemacht.

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import { readFileSync } from 'node:fs';
 import { gameFixture } from './fixtures.mjs';
+import { prepareLegacy } from './legacy-fixture.mjs';
 function setup(indexShape) {
   const game = gameFixture(indexShape), calls = [];
   const hooks = { state: {}, settings: { autoAscend: true }, log: () => {}, persist: () => {},
@@ -101,4 +102,56 @@ test('Strategy goal selection accepts both object and array registries', () => {
     bot.checkAllAchievementsOK();
     assert.match(bot.mainActivity, /Lucky payout/);
   }
+});
+test('Completed goal triggers legacy before the scheduler selects its next goal', () => {
+  const { game, bot } = setup();
+  prepareLegacy(game); game.AchievementsById[82].won = 1;
+  bot.run();
+  assert.equal(game.AscendTimer, 1);
+  assert.equal(bot.nextAchievement, 82);
+});
+test('Legacy cycle pays heavenly prices, assigns a permanent slot and reincarnates', () => {
+  const { game, bot } = setup();
+  prepareLegacy(game); game.AchievementsById[82].won = 1;
+  bot.run(); assert.equal(game.AscendTimer, 1);
+  game.finishAscension(); bot.delay = 0; bot.run();
+  assert.equal(game.OnAscend, false); assert.equal(game.ReincarnateTimer, 1);
+  assert.equal(game.heavenlyChips, 99); assert.equal(game.heavenlyChipsSpent, 101);
+  assert.equal(game.UpgradesById[363].bought, 1); assert.equal(game.UpgradesById[264].bought, 1);
+  assert.equal(game.UpgradesById[500].bought, 0);
+  assert.equal(game.permanentUpgrades[0], 0);
+  assert.equal(game.ascensionMode, 0); assert.equal(game.resets, 2);
+  assert.equal(bot.nextAchievement, 89);
+  assert.deepEqual(game.legacyActions, ['ascend', 'buy:363', 'buy:264', 'reincarnate']);
+});
+test('Disabled legacy leaves a manually opened heavenly screen alone', () => {
+  const { game, bot, hooks } = setup();
+  prepareLegacy(game); game.finishAscension(); hooks.settings.autoAscend = false;
+  bot.run();
+  assert.equal(game.OnAscend, true);
+  assert.equal(game.heavenlyChips, 200);
+  assert.deepEqual(game.legacyActions, []);
+});
+test('Disabled legacy still advances completed achievement goals without ascending', () => {
+  const { game, bot, hooks } = setup();
+  prepareLegacy(game); game.AchievementsById[82].won = 1; hooks.settings.autoAscend = false;
+  bot.run();
+  assert.equal(game.AscendTimer, 0); assert.equal(bot.nextAchievement, 89);
+});
+test('Permanent-slot selection skips duplicates and upgrades the UI does not offer', () => {
+  const { game, bot } = setup();
+  prepareLegacy(game); game.finishAscension();
+  game.UpgradesById[264].bought = 1;
+  game.permanentUpgrades[1] = 31;
+  Object.assign(game.UpgradesById[54], { bought:1, unlocked:1, pool:'', noPerm:1 });
+  Object.assign(game.UpgradesById[108], { bought:1, unlocked:0, pool:'' });
+  bot.assignPermanentSlot(0, [0, 31, 54, 108]);
+  assert.equal(game.permanentUpgrades[0], 0);
+  assert.equal(game.permanentUpgrades[1], 31);
+});
+test('Legacy chooses Born Again for a missing challenge achievement', () => {
+  const { game, bot } = setup();
+  prepareLegacy(game); game.finishAscension(); game.Achievements['Speed baking III'].won = 0;
+  bot.doReincarnate();
+  assert.equal(game.ascensionMode, 1);
 });

@@ -26,6 +26,8 @@ Fertilizer ist für Wachstum, Wood Chips für seltene Mutationen vorgesehen, sob
 
 ## Vermächtnis und permanente Slots
 
+Seit Version 1.0.3 bleibt ein erreichtes Aufstiegsziel erhalten, bis der Aufstieg und die Wiedergeburt erfolgt sind. Die Option **Selbstständig aufsteigen und wiedergeboren werden** steuert beide Seiten des Ablaufs; ausgeschaltet wartet der Bot im himmlischen Bildschirm. Bei der Slot-Auswahl prüft er dieselben Regeln wie der normale Dialog, einschließlich Pool, Freischaltung, noPerm und bereits anderweitig verwendeter Upgrades.
+
 Die Basisstrategie wählt Ziele für Grandmapocalypse, Jahreszeiten, Produktion und Spezialerfolge. Sie kauft im Aufstiegsbildschirm nur regulär verfügbare himmlische Upgrades und bezahlt deren Preis. Permanente Slots werden durch den normalen Zuweisungsdialog mit bereits besessenen Upgrades belegt. True Neverclick/Hardcore/Speed Baking erhalten nötigenfalls einen Born-Again-Durchlauf. Für Endless cycle wird nach passenden Freischaltungen frühzeitig die reguläre Aufstiegsserie versucht. Lucky-Upgrades werden nur bei tatsächlich erfüllter Prestige-Bedingung gekauft.
 
 Vor Aufstiegen wartet der Bot auf ein bestätigtes lokales Backup, neue Gartenpflanzen, die reguläre Wrinkler-Auszahlung und laufende Zucker-Buffs. Chocolate egg wird erst nach normalem Liquidieren gekauft. Ein Lauf mit Börsengewinn für das aktuelle Gaseous-assets-Ziel wird geschützt. Keine Aufstiegsroute ist für jedes mögliche Start-Save bewiesen; sehr hohes Prestige kann numerische Grenzen des Spiels erreichen.
