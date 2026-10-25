@@ -20,7 +20,7 @@ Auto Cookie Clicker Plugin Chrom als öffentliches, installierbares Chrome-Plugi
 ## Vermächtnis-Prüfung vom 25.10.2026
 
 - [x] Zielwechsel vor dem vorgesehenen Aufstieg korrigiert, ausgeschaltete Automatik auch im himmlischen Bildschirm respektiert und permanente Slots auf regulär auswählbare Upgrades begrenzt.
-- [ ] Aufstieg mit bestätigtem Backup, reguläre Chip-Ausgaben, Slot-Zuweisung und Wiedergeburt als zusammenhängenden Ablauf testen und ein aktualisiertes ZIP veröffentlichen.
+- [x] Aufstieg mit bestätigtem Backup, reguläre Chip-Ausgaben, Slot-Zuweisung und Wiedergeburt als zusammenhängenden Ablauf geprüft. Build, 38 Node-Tests, 10 Browser- und 6 native Erweiterungsprüfungen bestanden. Version 1.0.3 veröffentlicht; öffentliches ZIP mit Prüfsumme, Manifest und getesteter Strategie abgeglichen.
 
 ## Feste Grenzen
 
